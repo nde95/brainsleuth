@@ -1,0 +1,9 @@
+.tilt {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to left, rgb(247, 16, 231), rgb(103, 210, 237));
+}
+
+img {
+    padding-top: 2px;
+}
