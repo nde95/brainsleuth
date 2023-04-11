@@ -5,8 +5,9 @@ const ImageLinkForm = ({ onInputChange, onSubmit }) => {
     return(
         <div>
         <p className='f3'>
-            {'Enter a link to any image containing '}
-        </p>
+            {'Enter a link to any image containing people and it will detect their face!'}
+        </p><br/>
+        <p className='f4'>{'(Works on multiple people)'}</p>
             <div className='center'>
               <div className='form center pa4 br3 shadow-5'>
                 <input className='f4 pa2 w-70 center' type='text' onChange={onInputChange}/>

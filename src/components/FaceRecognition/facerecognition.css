@@ -12,7 +12,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #14f2e3c2;
   color: white;
   padding: 5px;
   font-size: 10px;
