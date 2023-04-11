@@ -6,6 +6,7 @@ import Logo from './components/Logo/logo';
 import Rank from './components/Rank/rank';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import ParticlesBg from 'particles-bg'
+import Signin from './components/SignIn/signin';
 
 class App extends Component {
   constructor() {
@@ -14,6 +15,7 @@ class App extends Component {
       input: '',
       imageUrl: '',
       boundingBoxes: [],
+      route: 'Signin'
     };
   }
 
@@ -33,17 +35,25 @@ class App extends Component {
       .catch(error => console.log('Error fetching API', error));
   }
 
-  render() {
+  onRouteChange = (route) => {
+    this.setState({route: route})
+  }
+    render() {
     return (
       <div className="App">
-        <ParticlesBg type="cobweb" bg={true} />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange} 
-          onSubmit={this.onSubmit}/>
-        <FaceRecognition imageUrl={this.state.imageUrl} boundingBoxes={this.state.boundingBoxes} />
+        <ParticlesBg type="cobweb" color="#e6e9ed" bg={true} />
+        <Navigation onRouteChange={this.onRouteChange}/>
+        { this.state.route === 'Signin' 
+         ? <Signin onRouteChange={this.onRouteChange}/> 
+         : <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm
+              onInputChange={this.onInputChange} 
+              onSubmit={this.onSubmit}/>
+            <FaceRecognition imageUrl={this.state.imageUrl} boundingBoxes={this.state.boundingBoxes} />
+          </div>
+        }
       </div> 
     );
   }
