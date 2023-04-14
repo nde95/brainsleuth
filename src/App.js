@@ -16,9 +16,26 @@ class App extends Component {
       input: '',
       imageUrl: '',
       boundingBoxes: [],
-      route: 'Signin',
-      isSignedIn: false
-    };
+      route: 'signin',
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
+    }
+  }
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    }})
   }
 
 
@@ -34,10 +51,28 @@ class App extends Component {
       .then(data => {
         const boundingBoxes = calculateFaceLocations(data);
         this.setState({ boundingBoxes: boundingBoxes });
+  
+        // Update image via PUT request
+        fetch('http://localhost:3000/image', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            id: this.state.user.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, { entries: count}));
+        })
       })
-      .catch(error => console.log('Error fetching API', error));
+      .catch(error => console.log(error));
   }
-
+  
+  
+  
+  
   onRouteChange = (route) => {
     if (route === 'Signout') {
       this.setState({isSignedIn: false})
@@ -55,14 +90,14 @@ class App extends Component {
         { route === 'home' 
          ? <div>
             <Logo />
-            <Rank />
+            <Rank name={this.state.user.name} entries={this.state.user.entries}/>
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
             <FaceRecognition imageUrl={imageUrl} boundingBoxes={boundingBoxes} />
             </div>
             : (
-              route === 'Signin'
-              ? <Signin onRouteChange={this.onRouteChange}/> 
-              : <Register onRouteChange={this.onRouteChange}/>
+              route === 'signin'
+              ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/> 
+              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )   
         }
       </div> 
