@@ -29,16 +29,19 @@ class Register extends React.Component {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: this.state.user.id
+        email: this.state.email,
+        password: this.state.password,
+        name: this.state.name,
       })
     })
     .then(response => response.json())
-    .then(count => {
-      this.setState({users: {
-        entries: count
-      }})
+    .then(user => {
+      if (user) {
+        this.props.loadUser(user)
+        this.props.onRouteChange('home');
+      }
     })
-  }
+}
  
   render() {
     return(
