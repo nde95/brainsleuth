@@ -67,6 +67,7 @@ class App extends Component {
         .then(count => {
           this.setState(Object.assign(this.state.user, { entries: count}));
         })
+        .catch(console.log)
       })
       .catch(error => console.log(error));
   }
