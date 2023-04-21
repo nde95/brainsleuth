@@ -9,23 +9,24 @@ import ParticlesBg from 'particles-bg'
 import Signin from './components/SignIn/signin';
 import Register from './components/Register/register';
 
+const initialState = {
+    input: '',
+    imageUrl: '',
+    boundingBoxes: [],
+    route: 'signin',
+    isSignedIn: false,
+    user: {
+      id: '',
+      name: '',
+      email: '',
+      entries: 0,
+      joined: ''
+  }
+}
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      boundingBoxes: [],
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -75,7 +76,7 @@ class App extends Component {
   
   onRouteChange = (route) => {
     if (route === 'Signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
