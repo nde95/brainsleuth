@@ -46,15 +46,25 @@ class App extends Component {
 
   onSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    const requestOptions = setupClarifaiJSON(this.state.input);
-    fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", requestOptions)
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        input: this.state.input
+      })
+    };
+  
+    fetch('http://localhost:3000/imageurl', requestOptions)
       .then(response => response.json())
       .then(data => {
         const boundingBoxes = calculateFaceLocations(data);
         this.setState({ boundingBoxes: boundingBoxes });
   
         // Update image via PUT request
-        fetch('http://localhost:3000/image', {
+        const requestOptions = {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -62,12 +72,14 @@ class App extends Component {
           body: JSON.stringify({ 
             id: this.state.user.id
           })
-        })
-        .then(response => response.json())
-        .then(count => {
-          this.setState(Object.assign(this.state.user, { entries: count}));
-        })
-        .catch(console.log)
+        };
+  
+        fetch('http://localhost:3000/image', requestOptions)
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count}));
+          })
+          .catch(console.log);
       })
       .catch(error => console.log(error));
   }
@@ -125,41 +137,6 @@ const calculateFaceLocations = (data) => {
   });
   return boundingBoxes;
 };
-
-const setupClarifaiJSON = (imageUrl) => {
-  const PAT = '9fa8af2849e047bebd8f9436758dfb7b';
-  const USER_ID = 'ratkid';       
-  const APP_ID = 'my-first-application';
-  const MODEL_ID = 'face-recognition';    
-  const IMAGE_URL = imageUrl;
-
-  const raw = JSON.stringify({
-    "user_app_id": {
-        "user_id": USER_ID,
-        "app_id": APP_ID
-    },
-    "inputs": [
-        {
-            "data": {
-                "image": {
-                    "url": IMAGE_URL
-                }
-            }
-        }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-  
-  return requestOptions;
-}
 
 
 export default App;
