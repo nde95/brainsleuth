@@ -57,7 +57,7 @@ class App extends Component {
       })
     };
   
-    fetch('http://localhost:3000/imageurl', requestOptions)
+    fetch('https://face-detective-api-2yy8.onrender.com/imageurl', requestOptions)
       .then(response => response.json())
       .then(data => {
         const boundingBoxes = calculateFaceLocations(data);
@@ -74,7 +74,7 @@ class App extends Component {
           })
         };
   
-        fetch('http://localhost:3000/image', requestOptions)
+        fetch('https://face-detective-api-2yy8.onrender.com/image', requestOptions)
           .then(response => response.json())
           .then(count => {
             this.setState(Object.assign(this.state.user, { entries: count}));
